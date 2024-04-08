@@ -24,7 +24,7 @@ namespace PasswordUtils.UnitTests
             //ça doit me dire que mon mot de passe est faible
             PasswordStrength result = PasswordTester.GetStrengthPassword(lowPassword);
 
-            Assert.AreEqual(PasswordStrength.Weak, result);
+            Assert.AreEqual(PasswordStrength.Weak, result, "This password " + lowPassword + " should be weak, but your program said that is " + result);
         }
 
         [TestMethod]
@@ -34,7 +34,7 @@ namespace PasswordUtils.UnitTests
 
             PasswordStrength result = PasswordTester.GetStrengthPassword(normalPassword);
 
-            Assert.AreEqual(PasswordStrength.Normal, result);
+            Assert.AreEqual(PasswordStrength.Normal, result, "This password " + normalPassword + " should be normal, but your program said that is " + result);
         }
 
         [TestMethod]
@@ -44,7 +44,7 @@ namespace PasswordUtils.UnitTests
 
             PasswordStrength result = PasswordTester.GetStrengthPassword(strongPassword);
 
-            Assert.AreEqual(PasswordStrength.Strong, result);
+            Assert.AreEqual(PasswordStrength.Strong, result, "This password "+strongPassword+" should be Strong, but your program said that is "+result);
         }
     }
 }
