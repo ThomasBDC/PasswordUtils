@@ -17,12 +17,34 @@ namespace PasswordUtils.UnitTests
     {
         //Vérifier un mot de passe qui doit être faible
         [TestMethod]
-        public void TestMethod1()
+        public void Password_ShouldBeWeak()
         {
             string lowPassword = "azerty";
 
-
             //ça doit me dire que mon mot de passe est faible
+            PasswordStrength result = PasswordTester.GetStrengthPassword(lowPassword);
+
+            Assert.AreEqual(PasswordStrength.Weak, result);
+        }
+
+        [TestMethod]
+        public void Password_ShouldBeNormal()
+        {
+            string normalPassword = "azertyuiopp";
+
+            PasswordStrength result = PasswordTester.GetStrengthPassword(normalPassword);
+
+            Assert.AreEqual(PasswordStrength.Normal, result);
+        }
+
+        [TestMethod]
+        public void Password_ShouldBeStrong()
+        {
+            string strongPassword = "APIUHIEHBHBKJHB123654";
+
+            PasswordStrength result = PasswordTester.GetStrengthPassword(strongPassword);
+
+            Assert.AreEqual(PasswordStrength.Strong, result);
         }
     }
 }
