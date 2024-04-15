@@ -17,8 +17,8 @@ namespace PasswordUtils.UnitTests
      * alpha et numeric -> 1pt ok
      * carcatères spéciaux -> 1pt ok
      * 
-     * IIII -> Fort
-     * APIUHIreztreztKJHB123654
+     * IIII
+     * Comp!exP@ss
      * * 
     */
 
@@ -29,42 +29,102 @@ namespace PasswordUtils.UnitTests
         [TestMethod]
         public void Password_ShouldBeWeak()
         {
-            string lowPassword = "azertgdse";
+            List<string> lowPasswords = new List<string>()
+            {
+                "password",
+                "123456",
+                "abcdef",
+                "qwerty",
+                "letmein",
+                "111111",
+                "admin",
+                "123456789",
+                "welcome",
+                "login"
+            };
 
-            //ça doit me dire que mon mot de passe est faible
-            PasswordStrength result = PasswordTester.GetStrengthPassword(lowPassword);
-
-            Assert.AreEqual(PasswordStrength.Weak, result, "This password " + lowPassword + " should be weak, but your program said that is " + result);
+            foreach(var lowPassword in lowPasswords)
+            {
+                //ça doit me dire que mon mot de passe est faible
+                PasswordStrength result = PasswordTester.GetStrengthPassword(lowPassword);
+                Assert.AreEqual(PasswordStrength.Weak, result, "This password " + lowPassword + " should be weak, but your program said that is " + result);
+            }
         }
 
         [TestMethod]
         public void Password_ShouldBeNormal()
         {
-            string normalPassword = "MAl12311qq";
+            List<string> normalPasswords = new List<string>()
+            {
+                "Passw0rd",
+                "Summer2022",
+                "3x@mpl3!",
+                "SecurePwd123",
+                "Ninja1234",
+                "P@ssw0rd",
+                "SuperSecret!",
+                "H3ll0W0rld",
+                "November21",
+                "MAl12311qq"
+            };
+             
+            foreach (var normalPassword in normalPasswords)
+            {
+                PasswordStrength result = PasswordTester.GetStrengthPassword(normalPassword);
 
-            PasswordStrength result = PasswordTester.GetStrengthPassword(normalPassword);
-
-            Assert.AreEqual(PasswordStrength.Normal, result, "This password " + normalPassword + " should be normal, but your program said that is " + result);
+                Assert.AreEqual(PasswordStrength.Normal, result, "This password " + normalPassword + " should be normal, but your program said that is " + result);
+            }
+            
         }
 
         [TestMethod]
         public void Password_ShouldBeStrong()
         {
-            string strongPassword = "APIUHIreztreztKJHB123654";
+            List<string> strongPasswords = new List<string> {
+                "P@ssword1!",
+                "Comp!exP@ssword",
+                "$ecureP@ssword",
+                "5tr0ngP@55!",
+                "L3tM3!nN0w",
+                "P@ssw0rd!",
+                "2024!supersecr3t",
+                "H@rdT0Gu3ss!",
+                "W3llD0n3!",
+                "APIUHIreztreztKJHB123654"
+            };
 
-            PasswordStrength result = PasswordTester.GetStrengthPassword(strongPassword);
+            foreach (var strongPassword in strongPasswords)
+            {
 
-            Assert.AreEqual(PasswordStrength.Strong, result, "This password "+strongPassword+" should be Strong, but your program said that is "+result);
+                PasswordStrength result = PasswordTester.GetStrengthPassword(strongPassword);
+
+                Assert.AreEqual(PasswordStrength.Strong, result, "This password " + strongPassword + " should be Strong, but your program said that is " + result);
+            }
         }
 
         [TestMethod]
         public void Password_ShouldBeInvincible()
         {
-            string invinciblePassword = "APIUHIreztreztKJHB123654$$$";
+            List<string> invinciblePasswords = new List<string> {
+                "P@ssw0rd!2024$",
+                "C0mp!exP@ssw0rd!",
+                "$tr0ngP@ssw0rd!",
+                "Pa$$w0rd2024$",
+                "5tr0ngP@55w0rd!",
+                "L3tM3!nN0w!2024",
+                "P@ssw0rd!12345",
+                "2024!SuperSecr3t$",
+                "H@rdT0Gu3ss!2024",
+                "W3llD0n3!2024",
+                "APIUHIreztreztKJHB123654$$$"
+            };
 
-            PasswordStrength result = PasswordTester.GetStrengthPassword(invinciblePassword);
+            foreach (var invinciblePassword in invinciblePasswords)
+            {
+                PasswordStrength result = PasswordTester.GetStrengthPassword(invinciblePassword);
+                Assert.AreEqual(PasswordStrength.Invincible, result, "This password " + invinciblePassword + " should be Invincible, but your program said that is " + result);
+            }
 
-            Assert.AreEqual(PasswordStrength.Invincible, result, "This password " + invinciblePassword + " should be Invincible, but your program said that is " + result);
         }
     }
 }
