@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,28 +11,64 @@ namespace PasswordUtils
     public static class PasswordTester
     {
         private static string numerics = "0123456789";
-        private static string chars = "azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN";
+        private static string charsMAJ = "AZERTYUIOPQSDFGHJKLMWXCVBN";
+        private static string charsMIN = "azertyuiopqsdfghjklmwxcvbn";
+        private static string chars = charsMAJ + charsMIN;
+        private static string specialChars = "!@#$%^&*()-_+=[]{}\\|;:'\",.<>/?`~¡¿¢£€¥©®™§°µ±×÷¶†‡";
 
         public static PasswordStrength GetStrengthPassword(string password)
         {
-            bool haveCharacters = password.Any(ch => chars.Contains(ch));
-            bool haveNumerics = password.Any(characters => numerics.Contains(characters));
+            int securityPts = 0;
 
-            if (password.Length < 8)
+            bool haveCharacters = PasswordContainsOneOfThis(password, chars);
+            bool haveNumerics = PasswordContainsOneOfThis(password, numerics);
+            bool haveMAJ = PasswordContainsOneOfThis(password, charsMAJ);
+            bool haveMIN = PasswordContainsOneOfThis(password, charsMIN);
+            bool haveSpecialChars = PasswordContainsOneOfThis(password, specialChars);
+            bool moreThat8Chars = password.Length > 8;
+            bool moreThat12Chars = password.Length > 12;
+
+            if(moreThat8Chars)
             {
-                return PasswordStrength.Weak;
+                securityPts++;
             }
-            else
+            if(moreThat12Chars)
             {
-                if (haveNumerics && haveCharacters)
-                {
-                    return PasswordStrength.Strong;
-                }
-                else
-                {
+                securityPts++;
+            }
+            if (haveMAJ && haveMIN)
+            {
+                securityPts++;
+            }
+            if (haveCharacters && haveNumerics)
+            {
+                securityPts++;
+            }
+            if (haveSpecialChars)
+            {
+                securityPts++;
+            }
+
+            switch(securityPts)
+            {
+                case 0:
+                case 1:
+                    return PasswordStrength.Weak;
+                case 2:
+                case 3:
                     return PasswordStrength.Normal;
-                }
+                case 4:
+                    return PasswordStrength.Strong;
+                case 5:
+                default:
+                    return PasswordStrength.Invincible;
             }
+        }
+
+        //Retourner si le mot de passe contient un élément de la chaine donnée
+        private static bool PasswordContainsOneOfThis(string password, string chaineATester)
+        {
+            return password.Any(ch => chaineATester.Contains(ch));
         }
     }
     
@@ -38,6 +76,7 @@ namespace PasswordUtils
     {
         Weak, 
         Normal, 
-        Strong
+        Strong,
+        Invincible
     }
 }
